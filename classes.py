@@ -24,15 +24,11 @@ class Phone(Field):
 
 class Birthday(Field):
     def __init__(self, value):
-        self.text = None
         try:
-            self.value = str_to_date(value)
+            str_to_date(value)
+            self.value = value
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
-        
-    def replace(self, old_text, new_text):
-        self.text = self.text.replace(old_text, new_text)
-        return self.text
 
 class Record:
     def __init__(self, name):
@@ -83,7 +79,8 @@ class AddressBook(UserDict):
         for user in self.data.values():
             if user.birthday is None:
                 continue
-            birthday_date = user.birthday.value.date()
+            
+            birthday_date = str_to_date(user.birthday.value).date()
             birthday_this_year = birthday_date.replace(year=today.year)
             if (birthday_this_year - today).days < 0:
                 birthday_this_year = birthday_this_year.replace(year=today.year + 1)

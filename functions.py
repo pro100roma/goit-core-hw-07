@@ -10,6 +10,8 @@ def input_error(func):
             return "Contact not found."
         except IndexError:
             return "Enter the argument for the command"
+        except AttributeError:
+            return "Contact not found."
     return inner
 
 def parse_input(user_input):
@@ -48,8 +50,6 @@ def change_contact(args, book):
 def show_phone(args, book):
     name = args[0]
     record = book.find(name)
-    if record is None:
-        raise KeyError
     return [phone.value for phone in record.phones]
 
 @input_error
@@ -64,8 +64,6 @@ def add_birthday(args, book):
 def show_birthday(args, book):
     name = args[0]
     record = book.find(name)
-    if record is None:
-        raise KeyError
     if record.birthday is None:
         return "Birthday isn't set for this contact"
     return record.birthday
